@@ -190,7 +190,10 @@ var contract = (function(module) {
                   }
 
                   if (timeout > 0 && new Date().getTime() - start > timeout) {
-                    return reject(new Error("Transaction " + tx + " wasn't processed in " + (timeout / 1000) + " seconds!"));
+                    const e = new Error("Transaction " + tx + " wasn't processed in " + (timeout / 1000) + " seconds!")
+                    e.timedOut = true
+                    e.tx = tx
+                    return reject(e);
                   }
 
                   setTimeout(make_attempt, 1000);
